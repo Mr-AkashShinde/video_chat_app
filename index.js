@@ -14,23 +14,25 @@ app.use(cors());
 const PORT = process.env.PORT || 5000;
 
 app.get("/", (req,res) => {
-    res.send('Server is running.');
+    res.send("Server is running.");
 });
 
 io.on('connection', (socket)=> {
-    socket.emit('me', socket.id);
+    socket.emit("me", socket.id);
 
-    socket.on('disconnect', () => {
+    socket.on("disconnect", () => {
         socket.broadcast.emit("callended");
     });
-    console.log(socket.id)
+    //console.log(socket.id)
 
     socket.on("calluser", ({ userToCall, signalData, from, name }) => {
+       // console.log(userToCall)
         io.to(userToCall).emit("calluser", { signal: signalData, from, name });
     });
 
     socket.on("answercall", (data) => {
-        io.to(data.io).emit("callaccepted", data.signal);
+       // console.log(data.to)
+        io.to(data.to).emit("callaccepted", data.signal);
     })
 })
 

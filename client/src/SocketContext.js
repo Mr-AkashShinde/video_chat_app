@@ -30,18 +30,19 @@ const ContextProvider = ({ children }) => {
     socket.on('me', (id) => setMe(id));
     
 
-    socket.on('callUser', ({ from, name: callerName, signal }) => {
-      setCall({ isReceivingCall: true, from, name: callerName, signal });
+    socket.on('calluser', ({ from, name: callerName, signal }) => {
+      console.log('test9')
+      setCall({ isReceivedCall: true, from, name: callerName, signal });
     });
   }, []);
-  console.log(me);
+  //console.log(me);
   const answerCall = () => {
     setCallAccepted(true);
 
     const peer = new Peer({ initiator: false, trickle: false, stream });
 
     peer.on('signal', (data) => {
-      socket.emit('answerCall', { signal: data, to: call.from });
+      socket.emit('answercall', { signal: data, to: call.from });
     });
 
     peer.on('stream', (currentStream) => {
@@ -55,18 +56,20 @@ const ContextProvider = ({ children }) => {
 
   const callUser = (id) => {
     const peer = new Peer({ initiator: true, trickle: false, stream });
-
+   
     peer.on('signal', (data) => {
-      socket.emit('callUser', { userToCall: id, signalData: data, from: me, name });
+      console.log('test1')
+      socket.emit('calluser', { userToCall: id, signalData: data, from: me, name });
     });
 
     peer.on('stream', (currentStream) => {
+      console.log('test2')
       userVideo.current.srcObject = currentStream;
     });
 
-    socket.on('callAccepted', (signal) => {
+    socket.on('callaccepted', (signal) => {
+      console.log('test3')
       setCallAccepted(true);
-
       peer.signal(signal);
     });
 
@@ -75,7 +78,6 @@ const ContextProvider = ({ children }) => {
 
   const leaveCall = () => {
     setCallEnded(true);
-
     connectionRef.current.destroy();
 
     window.location.reload();

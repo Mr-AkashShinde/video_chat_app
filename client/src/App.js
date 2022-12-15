@@ -41,6 +41,9 @@ const App = () => {
                 <Typography variant="h2" align="center">Video Chat</Typography>
             </AppBar>
             <VideoPlayer />
+            <Options>
+                <Notifications />
+            </Options>
             
         </div>
     );
