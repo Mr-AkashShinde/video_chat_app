@@ -1,24 +1,26 @@
-const app = require("express")();
-const server = require("http").createServer(app);
-const cors = require("cors");//enable cross origin request
-// import path from 'path';
-// import {fileURLToPath} from 'url';
+import express from "express";
+const app = express();
+import http from "http";
+const server = http.createServer(app);
+import cors from "cors";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
-// app.use(express.static(path.join(__dirname, "client", "build")))
+app.use(express.static(path.join(__dirname, "client", "build")))
 
-// app.get("*", (req, res) => {
-//     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-// });
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
 
-const io =require("socket.io")(server, {
+import { Server } from "socket.io";
+const io = new Server(server, {
     cors: {
         origin: "*",
-        methods: ["GET", "POST"]
-    }
+    },
 });
 
 app.use(cors());
@@ -26,11 +28,11 @@ app.use(cors());
 
 const PORT = process.env.PORT || 5000;
 
-app.get("/", (req,res) => {
+app.get("/", (req, res) => {
     res.send("Server is running.");
 });
 
-io.on('connection', (socket)=> {
+io.on('connection', (socket) => {
     socket.emit("me", socket.id);
 
     socket.on("disconnect", () => {
@@ -39,12 +41,12 @@ io.on('connection', (socket)=> {
     //console.log(socket.id)
 
     socket.on("calluser", ({ userToCall, signalData, from, name }) => {
-       // console.log(userToCall)
+        // console.log(userToCall)
         io.to(userToCall).emit("calluser", { signal: signalData, from, name });
     });
 
     socket.on("answercall", (data) => {
-       // console.log(data.to)
+        // console.log(data.to)
         io.to(data.to).emit("callaccepted", data.signal);
     })
 })
