@@ -18,13 +18,15 @@ const ContextProvider = ({ children }) => {
   const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
+  
 
   useEffect(() => {
+    
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
         setStream(currentStream);
-
         myVideo.current.srcObject = currentStream;
+        
       });
 
     socket.on('me', (id) => setMe(id));
@@ -82,7 +84,7 @@ const ContextProvider = ({ children }) => {
 
     window.location.reload();
   };
-
+  
   return (
     <SocketContext.Provider value={{
       call,

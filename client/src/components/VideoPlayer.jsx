@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { SocketContext } from '../SocketContext';
 import { useContext } from 'react';
+import { IconButton, Icon } from '@material-ui/core';
+import { Mic, Videocam } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     video: {
@@ -22,7 +24,15 @@ const useStyles = makeStyles((theme) => ({
         padding: '10px',
         border: '2px solid black',
         margin: '10px',
+        // display: 'flex',
+        // flexDirection: 'column',
+        // alignItems: 'center',
     },
+    icons: {
+        display: 'flex',
+        justifyContent: 'center',
+    }
+
 }));
 
 const VideoPlayer = () => {
@@ -36,9 +46,22 @@ const VideoPlayer = () => {
                 stream && (
                     <Paper className={classes.paper}>
                         <Grid item xs={12} md={6}>
-                            <Typography variant="h5" gutterBottom>{name || 'Name'}</Typography>
+                            <Typography variant="h5" gutterBottom>{name || "User's name: "}</Typography>
                             <video playsInline muted ref={myVideo} autoPlay className={classes.video} />
+
                         </Grid>
+                        <div className={classes.icons}>
+                        <IconButton IconButton edge="start"  color="inherit" aria-label="Mic">
+                            <Icon>
+                                <Mic />
+                            </Icon>
+                        </IconButton>
+                        <IconButton color="inherit" aria-label="Videocam">
+                            <Icon>
+                                <Videocam />
+                            </Icon>
+                        </IconButton>
+                        </div>
                     </Paper>
                 )
             }
@@ -49,8 +72,21 @@ const VideoPlayer = () => {
                     <Paper className={classes.paper}>
                         <Grid item xs={12} md={6}>
                             <Typography variant="h5" gutterBottom>{call.name || 'Name'}</Typography>
-                            <video playsInline  ref={userVideo} autoPlay className={classes.video} />
+                            <video playsInline ref={userVideo} autoPlay className={classes.video} />
+
                         </Grid>
+                        <div className={classes.icons}>
+                        <IconButton color="inherit" aria-label="Mic">
+                            <Icon>
+                                <Mic />
+                            </Icon>
+                        </IconButton>
+                        <IconButton color="inherit" aria-label="Videocam">
+                            <Icon>
+                                <Videocam />
+                            </Icon>
+                        </IconButton>
+                        </div>
                     </Paper>
                 )
             }

@@ -1,6 +1,18 @@
 const app = require("express")();
 const server = require("http").createServer(app);
 const cors = require("cors");//enable cross origin request
+// import path from 'path';
+// import {fileURLToPath} from 'url';
+
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+
+
+// app.use(express.static(path.join(__dirname, "client", "build")))
+
+// app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+// });
 
 const io =require("socket.io")(server, {
     cors: {
@@ -10,6 +22,7 @@ const io =require("socket.io")(server, {
 });
 
 app.use(cors());
+
 
 const PORT = process.env.PORT || 5000;
 
