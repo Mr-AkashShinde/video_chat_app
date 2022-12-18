@@ -15,30 +15,40 @@ const ContextProvider = ({ children }) => {
   const [name, setName] = useState('');
   const [call, setCall] = useState({});
   const [me, setMe] = useState('');
+  const [audioMuted, setAudioMuted] = useState(false);
+  const [videoMuted, setVideoMuted] = useState(false);
 
   const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
-  
 
-  useEffect(() => {
-    
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-      .then((currentStream) => {
-        setStream(currentStream);
-        myVideo.current.srcObject = currentStream;
-        
-        
-      });
+  useEffect(() => { 
+  
+    navigator.mediaDevices.getUserMedia({ video:true, audio: true})
+    .then((currentStream) => {
+    // Disable the audio track
+   audioMuted && (currentStream.getAudioTracks()[0].enabled=false);
+
+    // Disable the video track
+    videoMuted && (currentStream.getVideoTracks()[0].enabled=false);
+
+      setStream(currentStream);
+      myVideo.current.srcObject = currentStream;
+    });
 
     socket.on('me', (id) => setMe(id));
-    
+
 
     socket.on('calluser', ({ from, name: callerName, signal }) => {
       console.log('test9')
       setCall({ isReceivedCall: true, from, name: callerName, signal });
     });
-  }, []);
+
+     return () => {
+    socket.off('me');
+    socket.off('calluser');
+  };
+  }, [audioMuted,videoMuted]);
   //console.log(me);
   const answerCall = () => {
     setCallAccepted(true);
@@ -60,7 +70,7 @@ const ContextProvider = ({ children }) => {
 
   const callUser = (id) => {
     const peer = new Peer({ initiator: true, trickle: false, stream });
-   
+
     peer.on('signal', (data) => {
       console.log('test1')
       socket.emit('calluser', { userToCall: id, signalData: data, from: me, name });
@@ -101,6 +111,8 @@ const ContextProvider = ({ children }) => {
       callUser,
       leaveCall,
       answerCall,
+      videoMuted, setVideoMuted,
+      audioMuted, setAudioMuted,
     }}
     >
       {children}
