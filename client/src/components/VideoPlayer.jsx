@@ -47,7 +47,7 @@ const VideoPlayer = () => {
         
     // mineVideo===null ? setMineVideo(myVideo): setMineVideo(null);
     // setMineVideo(myVideo);
-    myVideo.current.srcObject = null ? myVideo.current.srcObject=stream:myVideo.current.srcObject=null;
+    myVideo.current.srcObject = myVideo.current.srcObject === null ?  stream :  null;
     
     }
     return (
