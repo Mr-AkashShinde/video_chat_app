@@ -9,6 +9,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import VideoPlayer from './components/VideoPlayer';
 import Notifications from './components/Notifications';
 import Options from './components/Options';
+import Chat from './components/Chat';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -58,6 +59,7 @@ const App = () => {
                         <Typography variant="h3" className={classes.title} align="center">
                             Face Chat
                         </Typography>
+                        
                     </Toolbar>
                 </AppBar>
             </div>
@@ -71,6 +73,7 @@ const App = () => {
                 <Options>
                     <Notifications />
                 </Options>
+                <Chat />
 
             </div>
         </div>
